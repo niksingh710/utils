@@ -79,6 +79,11 @@
               (with pkgs;[ bat ])
               (builtins.readFile ./src/cat);
 
+            monitor = mkShellApplication
+              "monitor"
+              (with pkgs;[ jq ])
+              (builtins.readFile ./src/hypr/monitor);
+
           };
         };
     };

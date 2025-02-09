@@ -41,6 +41,7 @@ nix run github:niksingh710/utils#fast
 | [cat](./src/cat) | Replaces cat command to use `bat` without paging and `-p` flag enables paging |
 | [myip](./src/myip) | Shows local/global ip with flags `[-g|-l]`. |
 | [hypr/quick-term](./src/hypr/quick-term) | Spawns a floating terminal in Hyprland, similar to Yakuake. |
+| [hypr/monitor](./src/hypr/monitor) | Assigns 1-9 workspace to primary monitor and 10/0 to secondary (need help check comment in script) |
 | [audio-channel](./) | `fzf/rofi/dmenu` picker options to select default mic/output audio channel (will add as i complete my ndots) |
 
 ## 📖 Usage
