@@ -68,6 +68,12 @@
               "quick-term"
               (with pkgs;[ foot jq tmux ])
               (builtins.readFile ./src/hypr/quick-term);
+
+            myip = mkShellApplication
+              "myip"
+              (with pkgs;[ dnsutils ])
+              (builtins.readFile ./src/myip);
+
           };
         };
     };

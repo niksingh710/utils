@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+if [ "$#" -eq 0 ]; then
+  echo "Usage: myip [-g|-l]"
+  echo "  -g: Use Google's public DNS servers to determine the public IP address"
+  echo "  -l: List local IP addresses"
+  exit 1
+fi
+case "$1" in
+-g)
+  echo "ipv4: $(dig -4 \
+    TXT +short o-o.myaddr.l.google.com \
+    @ns1.google.com)" |
+    sed 's/"//g'
+
+  output=$(dig -6 \
+    TXT +short o-o.myaddr.l.google.com \
+    @ns1.google.com)
+  # shellcheck disable=2181
+  if [ $? -eq 0 ]; then
+    echo "ipv6: $output" | sed 's/"//g'
+  else
+    echo "ipv6: Not available"
+  fi
+  ;;
+-l)
+  (ip addr show || ifconfig) 2>/dev/null |
+    awk '/inet / && !/127.0.0.1/ {print $NF ": " $2}' |
+    sed 's#/.*##'
+  ;;
+*)
+  echo "Usage: myip [-g|-l]"
+  exit 1
+  ;;
+esac
