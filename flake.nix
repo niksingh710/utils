@@ -5,6 +5,7 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     center-align.url = "github:niksingh710/center-align";
+    bstat.url = "github:niksingh710/basic-battery-stat";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -19,6 +20,7 @@
         {
           packages = {
             center-align = inputs'.center-align.packages.default;
+            bstat = inputs'.bstat.packages.default;
             fast = mkShellApplication
               "fast" [ pkgs.jq ]
               (builtins.readFile ./src/hypr/fast);
