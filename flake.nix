@@ -74,6 +74,11 @@
               (with pkgs;[ dnsutils ])
               (builtins.readFile ./src/myip);
 
+            cat = mkShellApplication
+              "cat"
+              (with pkgs;[ bat ])
+              (builtins.readFile ./src/cat);
+
           };
         };
     };

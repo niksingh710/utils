@@ -38,6 +38,7 @@ nix run github:niksingh710/utils#fast
 | [hypr/lid-down](./src/hypr/lid-down) | Handles laptop lid-down state. |
 | [volume](./src/volume) | Supports `up`, `down`, `mute`, and `mic-mute` for volume control. |
 | [brightness](./src/brightness) | Adjusts screen brightness using `brightnessctl`. |
+| [cat](./src/cat) | Replaces cat command to use `bat` without paging and `-p` flag enables paging |
 | [myip](./src/myip) | Shows local/global ip with flags `[-g|-l]`. |
 | [hypr/quick-term](./src/hypr/quick-term) | Spawns a floating terminal in Hyprland, similar to Yakuake. |
 | [audio-channel](./) | `fzf/rofi/dmenu` picker options to select default mic/output audio channel (will add as i complete my ndots) |

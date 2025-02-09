@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+paged=false
+batarg=("--tabs" "2")
+
+for arg in "$@"; do
+  case "$arg" in
+  -p) paged=true ;;
+  *) batarg+=("$arg") ;;
+  esac
+done
+
+if ! "$paged"; then
+  batarg+=(-pp)
+fi
+
+bat "${batarg[@]}"
