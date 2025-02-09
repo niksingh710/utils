@@ -4,6 +4,7 @@
   inputs = {
     flake-parts.url = "github:hercules-ci/flake-parts";
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    center-align.url = "github:niksingh710/center-align";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -17,6 +18,7 @@
         in
         {
           packages = {
+            center-align = inputs'.center-align.packages.default;
             fast = mkShellApplication
               "fast" [ pkgs.jq ]
               (builtins.readFile ./src/hypr/fast);
