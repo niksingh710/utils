@@ -22,6 +22,8 @@ inputs.utils.url = "github:niksingh710/utils";
 Or run scripts directly:
 ```sh
 nix run github:niksingh710/utils#fast
+nix run github:niksingh710/utils#zoom -- in
+nix run github:niksingh710/utils#fullscreen
 ```
 
 ## 🛠 Available Scripts
