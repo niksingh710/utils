@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+notify() {
+  # shellcheck disable=SC2015
+  notify-send "$@" || echo "$@"
+}
+
+sendNotification() {
+  brightness=$(($(brightnessctl g) * 100 / $(brightnessctl m)))
+  brightness=${brightness%.*}
+  notify \
+    --hint=string:x-dunst-stack-tag:brightness \
+    --hint=string:synchronous:brightness \
+    -a "Brightness" \
+    -h int:value:"$brightness" \
+    "Brightness: ${brightness}%"
+}
+
+help() {
+  echo "Usage: $(basename "$0") {up|down}"
+}
+
+if [ "$#" -ne 1 ]; then
+  help
+  exit 1
+fi
+
+case $1 in
+up)
+  brightnessctl s +5%
+  sendNotification
+  ;;
+down)
+  brightnessctl s 5%-
+  sendNotification
+  ;;
+*)
+  help
+  exit 1
+  ;;
+esac

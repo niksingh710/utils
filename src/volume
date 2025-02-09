@@ -1,0 +1,95 @@
+#!/usr/bin/env bash
+MOD=1 # Volume increment steps (5%)
+NOTIFY_TAG="volume"
+
+# sink: output device
+# source: input device
+
+notify() {
+  notify-send -a "Volume" \
+    --hint=string:x-dunst-stack-tag:"$NOTIFY_TAG" "$@" ||
+    echo "$@"
+}
+
+isSinkMuted() {
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED"
+}
+
+isSourceMuted() {
+  wpctl get-volume @DEFAULT_AUDIO_SOURCE@ | grep -q "MUTED"
+}
+
+defaultSinkName() {
+  wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.description" | cut -d"\"" -f2
+}
+
+getSinkName() {
+  wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.description" | cut -d"\"" -f2
+}
+
+getSourceName() {
+  wpctl inspect @DEFAULT_AUDIO_SOURCE@ | grep "node.description" | cut -d"\"" -f2
+}
+
+getSinkVolume() {
+  wpctl get-volume @DEFAULT_AUDIO_SINK@ | awk '{print $2 * 100}' | bc
+}
+
+toggleSinkMute() {
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+}
+
+toggleSourceMute() {
+  wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+}
+
+sendNotification() {
+  volume="$(getSinkVolume)%"
+  notify -a "Volume" -u low \
+    --hint=string:x-dunst-stack-tag:"$NOTIFY_TAG" \
+    --hint=string:synchronous:"$NOTIFY_TAG" \
+    -h int:value:"$volume" "Volume: $volume" \
+    -t 1000
+}
+
+muteNotification() {
+  if "$1"; then
+    notify "Muted" "$("$2")"
+  else
+    notify "UnMuted" "$("$2")"
+  fi
+}
+
+help() {
+  echo "Usage: $(basename "$0") {up|down|mute|mic-mute}"
+}
+
+if [ "$#" -ne 1 ]; then
+  help
+  exit 1
+fi
+
+case $1 in
+up)
+  isSinkMuted && toggleSinkMute
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ "$MOD"%+
+  sendNotification
+  ;;
+down)
+  isSinkMuted && toggleSinkMute
+  wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ "$MOD"%-
+  sendNotification
+  ;;
+mute)
+  toggleSinkMute
+  muteNotification isSinkMuted getSinkName
+  ;;
+mic-mute)
+  toggleSourceMute
+  muteNotification isSourceMuted getSourceName
+  ;;
+*)
+  help
+  exit 1
+  ;;
+esac

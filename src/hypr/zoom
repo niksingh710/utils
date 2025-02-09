@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+current_zoom_size() {
+  hyprctl getoption cursor:zoom_factor -j | jq '.float'
+}
+
+zoom() {
+  local zoom_curr
+  zoom_curr=$(current_zoom_size)
+  if [ "$1" == "0" ]; then
+    hyprctl keyword cursor:zoom_factor "1.0"
+  else
+    zoom_value="$(echo "$zoom_curr" + "$1" | bc)"
+    hyprctl keyword cursor:zoom_factor "$zoom_value"
+  fi
+}
+
+# Args handler
+getargs() {
+  case "$1" in
+  "in")
+    zoom 0.1
+    ;;
+  "out")
+    zoom -0.1
+    ;;
+  "reset")
+    zoom 0
+    ;;
+  *)
+    echo "Usage: zoom [in|out|reset]"
+    ;;
+  esac
+}
+getargs "$@"

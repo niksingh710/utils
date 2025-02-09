@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# if the current window is grouped then it enables submap `Group`
+# else it makes the window grouped
+
+isGroup="$(hyprctl activewindow -j | jq '.grouped | length')"
+
+if [ "$isGroup" -eq "0" ]; then
+  hyprctl dispatch togglegroup
+  notify-send "Group enabled"
+else
+  hyprctl dispatch submap "Group"
+  notify-send "Entered Submap"
+fi

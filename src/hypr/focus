@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+# switches focus in hyprland window either it is on floating or tiling mode
+[ $# -eq 0 ] && {
+  echo "invalid move"
+}
+
+[ "$1" = "cyclenext" ] && {
+  arg="none"
+  [ "$2" = "" ] || arg="prev"
+  hyprctl dispatch cyclenext "$arg"
+  exit
+}
+
+if [[ "$1" =~ ^(l|r|u|d)$ ]]; then
+  floating=$(hyprctl activewindow -j | jq '.floating')
+  if [ "$floating" = true ]; then
+    arg=none
+    [[ "$1" =~ ^(l|u)$ ]] && arg='prev'
+    hyprctl dispatch cyclenext "$arg"
+    floating=$(hyprctl activewindow -j | jq '.floating')
+    # Checks for if newly focused window is also floating
+    if [ "$floating" = true ]; then
+      pid=$(hyprctl activewindow -j | jq '.pid')
+      hyprctl dispatch alterzorder top,"pid:$pid"
+    fi
+  else
+    hyprctl dispatch movefocus "$1"
+    pid=$(hyprctl activewindow -j | jq '.pid')
+    hyprctl dispatch alterzorder top,"pid:$pid"
+  fi
+fi

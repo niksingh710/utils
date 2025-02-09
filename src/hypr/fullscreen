@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# Cycles the fullscreen
+fullscreenmode="$(hyprctl activewindow -j | jq '.fullscreenClient')"
+
+result=$(((fullscreenmode + 1) % 3))
+hyprctl dispatch fullscreen "$result"

@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+wl-paste | swappy -f - &>/dev/null ||
+  "notify-send" \
+    "swappy failed" "Maybe clipboard is not having a image as input"
