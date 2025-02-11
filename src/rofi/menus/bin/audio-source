@@ -1,0 +1,74 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+ROFI_CMD="${ROFI_CMD:-rofi -dmenu -config $SRC_DIR/share/conf.rasi -theme-str \"$ROFI_THEME_STR\"}"
+
+# sink: output device
+# source: input device
+
+# List of all sources (ignoring loopback)
+getSources() {
+  pw-dump | jq 'map(select((.info.props."media.class" == "Audio/Source"
+    or .info.props."media.class" == "Audio/Source/Virtual")
+    and (.info.props."node.description" | test("^(?!Loopback).*"))))
+    | map({
+        id,
+        "node.name": .info.props."node.name",
+        "node.description": .info.props."node.description"
+    })'
+}
+
+getDefaultSource() {
+  wpctl inspect @DEFAULT_AUDIO_SOURCE@ | grep "node.name" | cut -d"\"" -f2
+}
+
+getDefaultSourceDes() {
+  wpctl inspect @DEFAULT_AUDIO_SOURCE@ | grep "node.des" | cut -d"\"" -f2
+}
+
+getDefaultSourceId() {
+  getSources | jq -r '.[] | select(.["node.name"] == "'"$(getDefaultSource)"'") | .id' | cut -d" " -f1
+}
+
+getListedSources() {
+  getSources | jq -r '.[] | "\(.id) \(.["node.description"])"' | while read -r id name; do
+    if [[ "$id" == "$(getDefaultSourceId)" ]]; then
+      echo "🎤 $name"
+    else
+      echo "$id $name"
+    fi
+  done
+}
+
+rofiGetId() {
+  killall rofi &>/dev/null
+  echo "$1" | eval "$ROFI_CMD -p 'Sources: ' -no-custom" | cut -d" " -f1
+}
+
+changeSource() {
+  if [ "$(getSources | jq -r 'length')" -lt 2 ]; then
+    notify-send "Single Audio Device" "Only one audio device found"
+    return
+  fi
+  sources=$(getListedSources)
+
+  selectedSourceID=$(rofiGetId "$sources")
+
+  case "$selectedSourceID" in
+  "")
+    exit
+    ;;
+  "🎤")
+    notify-send "Default source selected" "no switch needed."
+    ;;
+  *)
+    wpctl set-default "$selectedSourceID"
+    notify-send "Switched Source To" "$(getDefaultSourceDes)"
+    ;;
+  esac
+}
+
+changeSource

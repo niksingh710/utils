@@ -6,6 +6,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     center-align.url = "github:niksingh710/center-align";
     bstat.url = "github:niksingh710/basic-battery-stat";
+    # remove after this https://github.com/firecat53/networkmanager-dmenu/pull/153 is merged
+    networkmanager.url = "github:niksingh710/networkmanager-dmenu";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -89,6 +91,7 @@
               (builtins.readFile ./src/hypr/monitor);
 
             powermenu-rofi = pkgs.callPackage ./src/rofi/powermenu/default.nix { };
+            menus = pkgs.callPackage ./src/rofi/menus/default.nix { inherit inputs; };
             clients = pkgs.callPackage ./src/hypr/clients/default.nix { };
           };
         };

@@ -1,0 +1,95 @@
+@import "config"
+@theme "/dev/null"
+* {
+ background-color: transparent;
+ radius: 8px;
+ roundness:                   15px;
+}
+
+inputbar {
+ children: [entry];
+}
+
+entry {
+ padding: 12px;
+ vertical-align: 0.5;
+ horizontal-align: 0.5;
+ text-color: #773440;
+}
+
+mainbox {
+ children: [inputbar, listview];
+}
+window {
+ /* properties for window widget */
+ border-radius:               8px;
+
+ /* properties for all widgets */
+ enabled:                     true;
+ cursor:                      "default";
+ border-color:                @active;
+ border:                      1px solid;
+}
+
+configuration {
+ show-icons: false;
+ me-select-entry: "";
+ me-accept-entry: "MousePrimary";
+ show-icons: true;
+}
+
+textbox {
+ vertical-align:   0.5;
+ horizontal-align: 0.5;
+}
+
+listview {
+ columns:       9;
+ lines:         7;
+ cycle:         true;
+ dynamic:       true;
+ layout:        vertical;
+ flow:          horizontal;
+ reverse:       false;
+ fixed-height:  true;
+ fixed-columns: true;
+}
+
+element {
+ orientation: vertical;
+ enabled:                     true;
+ spacing:                     10px;
+ padding:                     -30px 0px 30px 0px;
+ margin:                      20px 10px;
+ border-radius:               20px;
+ background-color:            transparent;
+ text-color:                  #773440;
+ cursor:                      pointer;
+}
+
+element selected.normal {
+ background-color:            #a485dd77;
+ text-color:                  #773440;
+}
+
+element-icon {
+ padding:                     0px;
+ margin: 0px;
+ background-color:            transparent;
+ text-color:                  inherit;
+ size:                        32px;
+ cursor:                      inherit;
+}
+
+element-text {
+ enabled: true;
+ padding: 0px;
+ margin: 0px;
+ background-color:            transparent;
+ text-color:                  inherit;
+ cursor:                      inherit;
+ vertical-align:              0;
+ horizontal-align:            0.5;
+
+ font:            "Noto Color Emoji 24";
+}

@@ -1,0 +1,4 @@
+@theme "./clients.rasi"
+@import "./conf.rasi"
+
+{{bt-theme-str}}

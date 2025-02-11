@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+
+killall rofi &>/dev/null
+
+rofi-bluetooth -i \
+  -config "$SRC_DIR/share/bt.rasi"

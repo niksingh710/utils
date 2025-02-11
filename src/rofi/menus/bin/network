@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+# SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+# SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+killall rofi &>/dev/null
+networkmanager_dmenu

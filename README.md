@@ -46,6 +46,11 @@ nix run github:niksingh710/utils#fullscreen
 | [hypr/monitor](./src/hypr/monitor) | Assigns 1-9 workspace to primary monitor and 10/0 to secondary (need help check comment in script) |
 | [hypr/clients/run-focus](./src/hypr/clients) | Lists all opened clients in rofi and focus on them if also drun then, for colors you can override the theme e.g below.|
 | [hypr/clients/get-client](./src/hypr/clients) | Lists all opened clients in rofi and brings them to the current workspace (ignores special workspace)|
+| [rofi/menus/audio-sink](./src/rofi/menus) | Lists Speakers and present a rofi menu to switch default |
+| [rofi/menus/audio-source](./src/rofi/menus) | Lists Microphones and present a rofi menu to switch default |
+| [rofi/menus/rofimoji](./src/rofi/menus) | Emoji picker using rofi |
+| [rofi/menus/network](./src/rofi/menus) | Quick network manager using rofi |
+| [rofi/menus/bluetooth](./src/rofi/menus) | Quick bluetooth manager using rofi |
 | [rofi/powermenu](./src/rofi/powermenu) | Rofi power manu isolatedly packed so that it will run from anywhere without needing the theme to be passed.|
 | [center-align](https://github.com/niksingh710/center-align) | Logs the output in mid of terminal `echo hi \| center-align` |
 | [bstat](https://github.com/niksingh710/basic-battery-stat) | Shows the battery status of system and mobile device if kdeconnect is connected |
@@ -74,7 +79,8 @@ And apply these `windowrulev2` settings:
 "stayfocused,class:^(foot-quick)$"
 ```
 
-#### Rofi Power Menu
+#### Rofi
+##### Power Menu
 ```sh
 nix run github:niksingh710/utils#powermenu-rofi
 ```
@@ -83,6 +89,18 @@ nix run github:niksingh710/utils#powermenu-rofi
 <summary>📸 Screenshots</summary>
 
 ![Image](https://github.com/user-attachments/assets/f7b40d4b-acc3-43c7-b67b-80b659e57432)
+
+</details>
+
+##### Emoji, Network, Bluetooth, Audio
+```sh
+nix run github:niksingh710/utils#menus
+```
+
+<details>
+<summary>📸 Screenshots</summary>
+
+![Image](https://github.com/user-attachments/assets/d73e211b-15be-44a0-82b9-db32be4fef30)
 
 </details>
 

@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+ROFI_CMD="${ROFI_CMD:-rofi -dmenu -config $SRC_DIR/share/conf.rasi -theme-str \"$ROFI_THEME_STR\"}"
+
+# sink: output device
+# source: input device
+
+# List of all sinks (ignoring loopback)
+getSinks() {
+  pw-dump | jq 'map(select(.info.props."media.class" == "Audio/Sink"
+    and (.info.props."node.description" | test("^(?!Loopback|Easy Effects Sink).*"))))
+    | map({
+        id,
+        "node.name": .info.props."node.name",
+        "node.description": .info.props."node.description"
+    })'
+}
+getDefaultSink() {
+  wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.name" | cut -d"\"" -f2
+}
+
+getDefaultSinkDes() {
+  wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.des" | cut -d"\"" -f2
+}
+
+getDefaultSinkId() {
+  getSinks | jq -r '.[] | select(.["node.name"] == "'"$(getDefaultSink)"'") | .id' | cut -d" " -f1
+}
+
+getListedSinks() {
+  getSinks | jq -r '.[] | "\(.id) \(.["node.description"])"' | while read -r id name; do
+    if [[ "$id" == "$(getDefaultSinkId)" ]]; then
+      echo "🔊 $name"
+    else
+      echo "$id $name"
+    fi
+  done
+}
+
+
+rofiGetId() {
+  killall rofi &>/dev/null
+  echo "$1" | eval "$ROFI_CMD -p 'Sink: ' -no-custom" | cut -d" " -f1
+}
+
+changeSink() {
+  if [ "$(getSinks | jq -r 'length')" -lt 2 ]; then
+    notify-send "Single Audio Device" "Only one audio device found"
+    return
+  fi
+  sinks=$(getListedSinks)
+
+  selectedSinkID=$(rofiGetId "$sinks")
+
+  case "$selectedSinkID" in
+  "")
+    exit
+    ;;
+  "🔊")
+    notify-send "Default sink selected" "no switch needed."
+    ;;
+  *)
+    wpctl set-default "$selectedSinkID"
+    notify-send "Switched Sink To" "$(getDefaultSinkDes)"
+    ;;
+  esac
+}
+
+changeSink

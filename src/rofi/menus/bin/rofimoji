@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+killall rofi &>/dev/null
+
+rofimoji \
+  --action copy type \
+  --files emojis emoticons kaomoji nerd \
+  --skin-tone moderate \
+  --selector=rofi \
+  --clipboarder=wl-copy \
+  --typer=wtype \
+  --selector-args="-theme $SRC_DIR/share/rofimoji.rasi" \
+  --hidden-descriptions
