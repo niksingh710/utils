@@ -1,0 +1,66 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+# shellcheck disable=SC2015
+notify() {
+  check notify-send && notify-send -u low -t 3000 "$1" || {
+    echo "$1"
+  }
+}
+
+killall -q rofi
+
+# CMDs
+uptime="$(uptime | sed -e 's/up //g' | cut -f2 -d ' ')"
+ifhost=$(hostname)
+
+# Options
+shutdown='󰐦'
+reboot='󰑓'
+lock=''
+suspend='󰒲'
+logout='󰿅'
+
+# Rofi CMD
+rofi_cmd() {
+  rofi -dmenu \
+    -p "Goodbye ${USER}" \
+    -mesg "Uptime $ifhost: $uptime" \
+    -config "${SRC_DIR}/share/conf.rasi"
+}
+
+# Pass variables to rofi dmenu
+run_rofi() {
+  echo -e "$lock\n$suspend\n$logout\n$reboot\n$shutdown" | rofi_cmd
+}
+
+logout_fn() {
+  uwsm stop
+  sudo pkill -9 -u "$(whoami)"
+  # loginctl terminate-user ""
+  # loginctl terminate-session "$(loginctl session-status | head -n 1 | awk '{print $1}')"
+  # pkill -KILL -u niksingh710
+}
+
+[[ $1 == "-l" ]] && logout_fn && exit 0
+
+# Actions
+chosen="$(run_rofi)"
+case ''${chosen} in
+"$shutdown")
+  systemctl poweroff
+  ;;
+"$reboot")
+  systemctl reboot
+  ;;
+"$lock")
+  sleep .5s
+  loginctl lock-session
+  ;;
+"$suspend")
+  systemctl suspend
+  ;;
+"$logout")
+  logout_fn
+  ;;
+esac
