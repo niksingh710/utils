@@ -7,17 +7,22 @@ pkgs.stdenv.mkDerivation {
   src = ./.;
 
   nativeBuildInputs = [ pkgs.bash ];
-  runtimeInputs = [ pkgs.coreutils pkgs.rofi-wayland pkgs.killall ];
+  buildInputs = [ pkgs.coreutils pkgs.makeWrapper ];
 
   installPhase = ''
     # shellcheck disable=SC2154
     mkdir -p "$out/bin"
     cp "$src/bin/menu" "$out/bin/rofi-powermenu"
     chmod +x "$out/bin/rofi-powermenu"
-
     # Copy non-executable data files
     mkdir -p "$out/share/"
     cp "$src"/share/* "$out/share/"
+  '';
+
+  postInstall = ''
+    # Wrap the script to include dependencies in PATH
+    wrapProgram "$out/bin/rofi-powermenu" \
+      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.killall ]}
   '';
 
   meta = with pkgs.lib; {

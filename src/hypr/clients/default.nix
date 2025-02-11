@@ -6,7 +6,6 @@ pkgs.stdenv.mkDerivation {
 
   src = ./.;
 
-  buildInputs = with pkgs;[ rofi-wayland jq ];
   nativeBuildInputs = with pkgs;[ makeWrapper ];
 
   installPhase = ''
@@ -20,9 +19,21 @@ pkgs.stdenv.mkDerivation {
 
     cp share/* $out/share/
 
+  '';
+
+  postInstall = ''
     # Create a wrapper to inject ROFI_THEME_STR
-     wrapProgram $out/bin/run-focus --run "export ROFI_THEME_STR=\"${rofi-theme-str}\""
-     wrapProgram $out/bin/get-client --run "export ROFI_THEME_STR=\"${rofi-theme-str}\""
+        wrapProgram $out/bin/run-focus \
+        --run "export ROFI_THEME_STR=\"${rofi-theme-str}\"" \
+        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.jq ]}
+
+        wrapProgram $out/bin/get-client \
+        --run "export ROFI_THEME_STR=\"${rofi-theme-str}\"" \
+        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.jq ]}
+        wrapProgram $out/bin/list-clients \
+        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.jq ]}
+         wrapProgram $out/bin/focus-clients \
+        --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.jq ]}
 
   '';
 
