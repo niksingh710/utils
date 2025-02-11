@@ -12,6 +12,7 @@ pkgs.stdenv.mkDerivation rec {
     rofi-wayland
     jq
     killall
+    libnotify
     rofi-bluetooth
     rofimoji
     inputs.networkmanager.packages.${pkgs.system}.default
