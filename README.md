@@ -45,7 +45,10 @@ nix run github:niksingh710/utils#fullscreen
 | [hypr/quick-term](./src/hypr/quick-term) | Spawns a floating terminal in Hyprland, similar to Yakuake. |
 | [hypr/monitor](./src/hypr/monitor) | Assigns 1-9 workspace to primary monitor and 10/0 to secondary (need help check comment in script) |
 | [center-align](https://github.com/niksingh710/center-align) | Logs the output in mid of terminal `echo hi | center-align` |
+| [hypr/clients/run-focus](./src/hypr/clients) | Lists all opened clients in rofi and focus on them if also drun then, for colors you can override the theme e.g below.|
+| [hypr/clients/get-client](./src/hypr/clients) | Lists all opened clients in rofi and brings them to the current workspace (ignores special workspace)|
 | [rofi/powermenu](./src/rofi/powermenu) | Rofi power manu isolatedly packed so that it will run from anywhere without needing the theme to be passed.|
+| [center-align](https://github.com/niksingh710/center-align) | Logs the output in mid of terminal `echo hi \| center-align` |
 | [bstat](https://github.com/niksingh710/basic-battery-stat) | Shows the battery status of system and mobile device if kdeconnect is connected |
 | [audio-channel](./) | `fzf/rofi/dmenu` picker options to select default mic/output audio channel (will add as i complete my ndots) |
 
@@ -81,6 +84,33 @@ nix run github:niksingh710/utils#powermenu-rofi
 <summary>📸 Screenshots</summary>
 
 ![Image](https://github.com/user-attachments/assets/f7b40d4b-acc3-43c7-b67b-80b659e57432)
+
+</details>
+
+#### Clients
+##### run-focus and get-client
+
+```sh
+nix shell -p github:niksingh710/utils#clients -c "run-focus"
+```
+
+This will make theming easy with stylix or other modules.
+
+```nix
+self.packages.clients.override ({
+    rofi-theme-str = ''
+        * {
+            background: red;
+        }
+    '';
+})
+```
+
+<details>
+<summary>📸 Screenshots</summary>
+
+| ![Image](https://github.com/user-attachments/assets/0a08444a-9532-44dc-b01b-bfc39d98d0eb) | ![Image](https://github.com/user-attachments/assets/71bdb445-6475-4283-8ba4-a5cd82b184d3) |
+|-|-|
 
 </details>
 

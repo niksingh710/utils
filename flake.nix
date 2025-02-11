@@ -89,6 +89,7 @@
               (builtins.readFile ./src/hypr/monitor);
 
             powermenu-rofi = pkgs.callPackage ./src/rofi/powermenu/default.nix { };
+            clients = pkgs.callPackage ./src/hypr/clients/default.nix { };
           };
         };
     };

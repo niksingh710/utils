@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+# lists down all the clients opened on hyprland
+# ignores clients on special workspaces
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+"${SRC_DIR}/bin/list-clients"
+out=$(echo "$1" | awk '{print $3}')
+
+[ "$out" = "" ] || {
+  killall -q rofi &>/dev/null
+  hyprctl dispatch focuswindow "pid:$out"
+  hyprctl dispatch alterzorder top,"pid:$out"
+}
+exit 0

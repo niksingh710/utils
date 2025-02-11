@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+hyprctl clients -j | jq -r '.[]
+          | select(.mapped==true)
+          | select((.workspace.name | contains("special") | not) or (.workspace.name == "special:comms"))
+          | .class + " - " + (.pid|tostring) + " - " + .title'

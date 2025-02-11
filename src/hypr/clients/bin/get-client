@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# lists down all the clients opened on hyprland
+# ignores clients on special workspaces
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+ROFI_CMD="${ROFI_CMD:-rofi -dmenu -config $SRC_DIR/share/conf.rasi -theme-str \"$ROFI_THEME_STR\"}"
+
+_current_workspace="$(hyprctl monitors -j | jq '.[] | select(.focused==true)' | jq -j '.activeWorkspace.name')"
+
+killall -q rofi && exit
+
+out=$(
+  "$SRC_DIR/bin/list-clients" |
+    eval "$ROFI_CMD" |
+    awk '{print $3}'
+)
+
+[ "$out" = "" ] || {
+  hyprctl dispatch moveoutofgroup "pid:$out" &>/dev/null
+  hyprctl dispatch movetoworkspace "$_current_workspace,pid:$out" &>/dev/null
+  hyprctl dispatch alterzorder top,"pid:$out" &>/dev/null
+}
