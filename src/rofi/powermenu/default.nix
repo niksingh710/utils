@@ -1,6 +1,6 @@
 { pkgs, ... }:
 
-pkgs.stdenv.mkDerivation {
+pkgs.stdenv.mkDerivation rec {
   pname = "rofi-powermenu";
   version = "1.0";
 
@@ -8,6 +8,7 @@ pkgs.stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgs.bash ];
   buildInputs = [ pkgs.coreutils pkgs.makeWrapper ];
+  runtimeInputs = pkgs.lib.makeBinPath (with pkgs;[ rofi-wayland killall ]);
 
   installPhase = ''
     # shellcheck disable=SC2154
@@ -22,7 +23,7 @@ pkgs.stdenv.mkDerivation {
   postFixup = ''
     # Wrap the script to include dependencies in PATH
     wrapProgram "$out/bin/rofi-powermenu" \
-      --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.killall ]}
+      --prefix PATH : ${runtimeInputs}
   '';
 
   meta = with pkgs.lib; {
