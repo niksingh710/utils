@@ -21,7 +21,7 @@ pkgs.stdenv.mkDerivation {
 
   '';
 
-  postInstall = ''
+  postFixup = ''
     # Create a wrapper to inject ROFI_THEME_STR
         wrapProgram $out/bin/run-focus \
         --run "export ROFI_THEME_STR=\"${rofi-theme-str}\"" \

@@ -19,7 +19,7 @@ pkgs.stdenv.mkDerivation {
     cp "$src"/share/* "$out/share/"
   '';
 
-  postInstall = ''
+  postFixup = ''
     # Wrap the script to include dependencies in PATH
     wrapProgram "$out/bin/rofi-powermenu" \
       --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.rofi-wayland pkgs.killall ]}
