@@ -7,7 +7,7 @@ pkgs.stdenv.mkDerivation {
   src = ./.;
 
   nativeBuildInputs = [ pkgs.bash ];
-  buildInputs = [ pkgs.coreutils pkgs.rofi-wayland ];
+  runtimeInputs = [ pkgs.coreutils pkgs.rofi-wayland pkgs.killall ];
 
   installPhase = ''
     # shellcheck disable=SC2154
