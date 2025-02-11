@@ -44,7 +44,6 @@ nix run github:niksingh710/utils#fullscreen
 | [myip](./src/myip) | Shows local/global ip with flags `[-g,-l]`. |
 | [hypr/quick-term](./src/hypr/quick-term) | Spawns a floating terminal in Hyprland, similar to Yakuake. |
 | [hypr/monitor](./src/hypr/monitor) | Assigns 1-9 workspace to primary monitor and 10/0 to secondary (need help check comment in script) |
-| [center-align](https://github.com/niksingh710/center-align) | Logs the output in mid of terminal `echo hi | center-align` |
 | [hypr/clients/run-focus](./src/hypr/clients) | Lists all opened clients in rofi and focus on them if also drun then, for colors you can override the theme e.g below.|
 | [hypr/clients/get-client](./src/hypr/clients) | Lists all opened clients in rofi and brings them to the current workspace (ignores special workspace)|
 | [rofi/powermenu](./src/rofi/powermenu) | Rofi power manu isolatedly packed so that it will run from anywhere without needing the theme to be passed.|
