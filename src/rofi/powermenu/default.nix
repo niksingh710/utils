@@ -30,6 +30,7 @@ pkgs.stdenv.mkDerivation rec {
     description = "Rofi powermenu with theme already handled";
     homepage = "https://github.com/niksingh710/utils";
     license = licenses.mit;
+    mainProgram = "menu";
     maintainers = with maintainers; [ niksingh710 ];
     platforms = platforms.all;
   };
