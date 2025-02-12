@@ -52,6 +52,7 @@ nix run github:niksingh710/utils#fullscreen
 | [rofi/menus/network](./src/rofi/menus) | Quick network manager using rofi |
 | [rofi/menus/bluetooth](./src/rofi/menus) | Quick bluetooth manager using rofi |
 | [rofi/powermenu](./src/rofi/powermenu) | Rofi power manu isolatedly packed so that it will run from anywhere without needing the theme to be passed.|
+| [waybar/recorder](./src/waybar/) | Screen Recording utility utilising wf-screenrec. Sends `RTMIN+4` Signal to waybar |
 | [center-align](https://github.com/niksingh710/center-align) | Logs the output in mid of terminal `echo hi \| center-align` |
 | [bstat](https://github.com/niksingh710/basic-battery-stat) | Shows the battery status of system and mobile device if kdeconnect is connected |
 | [audio-channel](./) | `fzf/rofi/dmenu` picker options to select default mic/output audio channel (will add as i complete my ndots) |

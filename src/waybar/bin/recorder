@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# This script uses wl-screenrec to record the screen.
+# Also sends a waybar signal `pkill -RTMIN+4` waybar.
+
+dir="$HOME/Videos/Screen"
+
+mkdir -p "$dir"
+
+notify() {
+  notify-send -u low -t 3000 "$1" "$2"
+}
+
+if pgrep wl-screenrec &>/dev/null; then
+  kill -s SIGINT "$(pgrep -x wl-screenrec)" && notify "Screen Recording Stopped" "Recording Stopped"
+  sleep 1
+  pkill -RTMIN+4 waybar
+  exit 0
+fi
+
+filename="$dir/$(date +%b-%d-%Y_%H:%M:%S).mp4"
+
+if [ $# -eq 0 ]; then
+  # No args will select the output
+  dim="$(slurp -o)"
+else
+  # custom region select
+  dim="$(slurp)"
+fi
+
+if [ "$dim" = "" ]; then
+  notify "Screen Recording Cancelled" "No Area Is Selected"
+  exit 1
+fi
+audio_device="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.name" | cut -d"\"" -f2)"
+
+wl-screenrec \
+  -f "$filename" \
+  -g "$dim" \
+  --audio --audio-device "$audio_device" \
+  &
+
+if pgrep wl-screenrec &>/dev/null; then
+  notify "Screen Recording Started" "Recording to $filename"
+  pkill -RTMIN+4 waybar
+else
+  notify "Screen Recording Failed" "Failed to start recording"
+fi
