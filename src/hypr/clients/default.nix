@@ -31,11 +31,16 @@ pkgs.stdenv.mkDerivation rec {
         wrapProgram $out/bin/get-client \
         --run "export ROFI_THEME_STR=\"${rofi-theme-str}\"" \
         --prefix PATH : ${runtimeInputs}
+
         wrapProgram $out/bin/list-clients \
         --prefix PATH : ${runtimeInputs}
+
          wrapProgram $out/bin/focus-clients \
         --prefix PATH : ${runtimeInputs}
 
+         wrapProgram $out/bin/scratchpad-get \
+        --run "export ROFI_THEME_STR=\"${rofi-theme-str}\"" \
+        --prefix PATH : ${runtimeInputs}
   '';
 
   meta = {

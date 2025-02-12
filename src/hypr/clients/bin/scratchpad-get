@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# Expected to be in user's PATH
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+ROFI_CMD="${ROFI_CMD:-rofi -dmenu -config \
+  $SRC_DIR/share/conf.rasi \
+  -theme-str \"$ROFI_THEME_STR\"}"
+
+scratchpad -m "$ROFI_CMD" "$@" -g
