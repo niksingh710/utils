@@ -54,9 +54,9 @@ sendNotification() {
 
 muteNotification() {
   if "$1"; then
-    notify "Muted" "$("$2")"
+    notify "Muted $3" "$("$2")"
   else
-    notify "UnMuted" "$("$2")"
+    notify "UnMuted $3" "$("$2")"
   fi
 }
 
@@ -82,11 +82,11 @@ down)
   ;;
 mute)
   toggleSinkMute
-  muteNotification isSinkMuted getSinkName
+  muteNotification isSinkMuted getSinkName "Speaker"
   ;;
 mic-mute)
   toggleSourceMute
-  muteNotification isSourceMuted getSourceName
+  muteNotification isSourceMuted getSourceName "Microphone"
   ;;
 *)
   help
