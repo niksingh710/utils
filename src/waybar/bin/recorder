@@ -32,7 +32,7 @@ if [ "$dim" = "" ]; then
   notify "Screen Recording Cancelled" "No Area Is Selected"
   exit 1
 fi
-audio_device="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.name" | cut -d"\"" -f2)"
+audio_device="$(wpctl inspect @DEFAULT_AUDIO_SINK@ | grep "node.name" | cut -d"\"" -f2).monitor"
 
 wl-screenrec \
   -f "$filename" \
