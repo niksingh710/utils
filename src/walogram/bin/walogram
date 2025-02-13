@@ -1,0 +1,119 @@
+#!/usr/bin/env bash
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+
+color0="#202020"
+color1="#2a2827"
+color2="#504945"
+color3="#5a524c"
+color4="#bdae93"
+color5="#ddc7a1"
+color6="#ebdbb2"
+color7="#fbf1c7"
+color8="#ea6962"
+color9="#e78a4e"
+color10="#d8a657"
+color11="#a9b665"
+color12="#89b482"
+color13="#7daea3"
+color14="#d3869b"
+color15="#bd6f3e"
+
+# {{IMAGE}}
+# {{COLORS}}
+# Injected by nix
+
+themeName="stylix.tdesktop-theme"
+dir="$HOME/.cache/stylix-telegram-theme"
+
+# trap 'rm -rf "$tempdir"; exit 0' INT TERM EXIT
+gentheme() {
+  tempdir="$(mktemp -d)"
+  gencolors |
+    cat - "$SRC_DIR/share/colors.wal-constants" \
+      >"$tempdir/colors.tdesktop-theme"
+
+  if [ "$IMAGE" != "" ]; then
+    magick convert -resize 1920x1080 -blur 0x16 "$IMAGE" "$tempdir/background.jpg"
+
+    zip -j -FS "$dir/$themeName" "$tempdir"/* >/dev/null 2>&1 || {
+      # create clean zip in case syncing failed
+      rm -f "$dir/$themeName"
+      zip -jq "$dir/$themeName" "$tempdir"/* >/dev/null 2>&1
+    }
+  else
+    cp -f "$tempdir/colors.tdesktop-theme" "$dir/$themeName"
+  fi
+}
+
+gencolors() {
+  colors=(0 1 2 3 4 5 7 8 9 10 11 12 13 14 15)
+  divisions=(10 20 30 40 50 60 70 80 90)
+  alphas=(00 11 22 33 44 55 66 77 88 99 aa bb cc dd ee)
+  for i in "${colors[@]}"; do
+    color="color$i"
+    c_rgb_12d=$((0x"${!color:1:2}"))
+    c_rgb_34d=$((0x"${!color:3:2}"))
+    c_rgb_56d=$((0x"${!color:5:2}"))
+
+    for division in "${divisions[@]}"; do
+      # lighter variants
+      c_r=$((c_rgb_12d + (c_rgb_12d * (division / 10) / 10)))
+      c_g=$((c_rgb_34d + (c_rgb_34d * (division / 10) / 10)))
+      c_b=$((c_rgb_56d + (c_rgb_56d * (division / 10) / 10)))
+      [ "$c_r" -ge 255 ] && c_r=255
+      [ "$c_g" -ge 255 ] && c_g=255
+      [ "$c_b" -ge 255 ] && c_b=255
+      c_hex_r="$(printf "%x" "$c_r")"
+      c_hex_g="$(printf "%x" "$c_g")"
+      c_hex_b="$(printf "%x" "$c_b")"
+      [ "${#c_hex_r}" -eq 1 ] && c_hex_r="0${c_hex_r}"
+      [ "${#c_hex_g}" -eq 1 ] && c_hex_g="0${c_hex_g}"
+      [ "${#c_hex_b}" -eq 1 ] && c_hex_b="0${c_hex_b}"
+      c_hex="#${c_hex_r}${c_hex_g}${c_hex_b}"
+      eval "color${i}_lighter_${division}=${c_hex}"
+
+      # darker variants
+      c_r=$((c_rgb_12d - (c_rgb_12d * (division / 10) / 10)))
+      c_g=$((c_rgb_34d - (c_rgb_34d * (division / 10) / 10)))
+      c_b=$((c_rgb_56d - (c_rgb_56d * (division / 10) / 10)))
+      c_hex_r="$(printf "%x" "$c_r")"
+      c_hex_g="$(printf "%x" "$c_g")"
+      c_hex_b="$(printf "%x" "$c_b")"
+      [ "${#c_hex_r}" -eq 1 ] && c_hex_r="0${c_hex_r}"
+      [ "${#c_hex_g}" -eq 1 ] && c_hex_g="0${c_hex_g}"
+      [ "${#c_hex_b}" -eq 1 ] && c_hex_b="0${c_hex_b}"
+      c_hex="#${c_hex_r}${c_hex_g}${c_hex_b}"
+      eval "color${i}_darker_${division}=${c_hex}"
+    done
+  done
+
+  for i in "${colors[@]}"; do
+    echo "// color$i: original"
+    echo "color$i: $(eval "echo \"\$color${i}\"");"
+
+    echo "// color$i: lighter and darker variants"
+    for division in "${divisions[@]}"; do
+      echo "colorLighter${i}_${division}: $(eval "echo \"\$color${i}_lighter_${division}\"");"
+      echo "colorDarker${i}_${division}: $(eval "echo \"\$color${i}_darker_${division}\"");"
+    done
+
+    echo "// color$i: alpha variants"
+    for alpha in "${alphas[@]}"; do
+      echo "colorAlpha${i}_${alpha}: $(eval "echo \"\${color${i}}${alpha}\"");"
+    done
+    printf "\\n"
+  done
+}
+
+for i in 0 1 2 3 4 5 6 7; do
+  normal="color$i"
+  bright="color$((i + 8))"
+  [ "$(eval "echo \"\$$normal\"")" = "" ] && error "$normal value is missing"
+  [ "$(eval "echo \"\$$bright\"")" = "" ] && {
+    msg "$normal value used for $bright, because it is unset"
+    eval "$bright=\$$normal"
+  }
+done
+gentheme

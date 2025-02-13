@@ -90,6 +90,10 @@
               (with pkgs;[ jq ])
               (builtins.readFile ./src/hypr/monitor);
 
+            walogram = pkgs.callPackage ./src/walogram { };
+            walogram-test = (pkgs.callPackage ./src/walogram { }).override {
+              image = "/nix/store/1mfdyd874ib7rzn2y7gflhnpfc6gxnja-dock.png";
+            };
             powermenu-rofi = pkgs.callPackage ./src/rofi/powermenu/default.nix { };
             menus = pkgs.callPackage ./src/rofi/menus/default.nix { inherit inputs; };
             clients = pkgs.callPackage ./src/hypr/clients/default.nix { };
