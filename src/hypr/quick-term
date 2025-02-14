@@ -10,6 +10,6 @@ if [ "$_pid" != "" ]; then
     hyprctl dispatch focuswindow pid:"$_pid"
   fi
 else
-  foot -a "foot-quick" sh -c "tmux -L default new-session -A -s 'quick-term'" >/dev/null 2>&1 &
+  foot -a "foot-quick" sh -c "tmux new-session -A -s 'quick-term'" >/dev/null 2>&1 &
   exit 0
 fi
