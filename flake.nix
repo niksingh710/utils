@@ -96,7 +96,7 @@
             };
             powermenu-rofi = pkgs.callPackage ./src/rofi/powermenu/default.nix { };
             menus = pkgs.callPackage ./src/rofi/menus/default.nix { inherit inputs; };
-            clients-te = pkgs.callPackage ./src/hypr/clients/default.nix { uwsm = true; };
+            fullmenu = pkgs.callPackage ./src/rofi/fullmenu/default.nix { };
             clients = pkgs.callPackage ./src/hypr/clients/default.nix { };
             waybar-utils = pkgs.callPackage ./src/waybar/default.nix { };
           };

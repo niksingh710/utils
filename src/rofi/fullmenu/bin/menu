@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+SRC_DIR="$(dirname "$SCRIPT_DIR")"
+# shellcheck disable=SC2015
+
+ROFI_THEME_STR="${ROFI_THEME_STR:-}"
+
+killall -q rofi
+
+rofi -show drun -config "$SRC_DIR/share/conf.rasi"

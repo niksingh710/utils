@@ -1,0 +1,38 @@
+configuration {
+  drun-display-format: "{name}";
+  font: "JetBrainsMono Nerd Font 12";
+  hide-scrollbar: true;
+  hover-select: true;
+
+  kb-accept-entry: "Return";
+  kb-mode-complete: "";
+  kb-remove-char-back: "BackSpace";
+  kb-remove-to-eol: "Control+p";
+  kb-row-down: "Down,Control+j";
+  kb-row-left: "Control+h";
+  kb-row-right: "Control+l";
+  kb-row-up: "Up,Control+k";
+  kb-secondary-copy: "Control+c";
+
+  location: 0;
+  me-accept-entry: [ "MousePrimary","MouseSecondary" ];
+  me-select-entry: "";
+
+  show-icons: true;
+  sidebar-mode: false;
+  terminal: "foot";
+  xoffset: 0;
+  yoffset: 0;
+
+  kb-select-1: "l";
+  kb-select-2: "s";
+  kb-select-3: "e";
+  kb-select-4: "r";
+  kb-select-5: "S";
+
+	modi:                       "drun";
+  show-icons:                 true;
+  display-drun:               "";
+	drun-display-format:        "{name}";
+}
+@theme "./full.rasi"
