@@ -35,6 +35,7 @@ pkgs.stdenv.mkDerivation rec {
   '';
 
   meta = {
+    mainProgram = "menu";
     description = "Rofi menus for fullscreen application launcher";
     license = pkgs.lib.licenses.mit;
     maintainers = with pkgs.lib.maintainers; [ niksingh710 ];
