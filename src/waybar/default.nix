@@ -10,6 +10,7 @@ pkgs.stdenv.mkDerivation rec {
   nativeBuildInputs = with pkgs;[ makeWrapper ];
   runtimeInputs = pkgs.lib.makeBinPath (with pkgs; [
     jq
+    hyprpicker
     killall
     libnotify
     wl-screenrec
@@ -28,6 +29,8 @@ pkgs.stdenv.mkDerivation rec {
   postFixup = ''
     # Create a wrapper to inject ROFI_THEME_STR
     wrapProgram $out/bin/recorder \
+    --prefix PATH : ${runtimeInputs}
+    wrapProgram $out/bin/colorpicker \
     --prefix PATH : ${runtimeInputs}
   '';
 
