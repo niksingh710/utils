@@ -1,4 +1,4 @@
-{ pkgs, rofi-theme-str ? "", ... }:
+{ pkgs, rofi-theme-str ? "", uwsm ? false, ... }:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "clients";
@@ -7,7 +7,19 @@ pkgs.stdenv.mkDerivation rec {
   src = ./.;
 
   nativeBuildInputs = with pkgs;[ makeWrapper ];
-  runtimeInputs = pkgs.lib.makeBinPath (with pkgs; [ rofi-wayland jq killall ]);
+
+  runtimeInputs = pkgs.lib.makeBinPath (with pkgs; [
+    (rofi-wayland.overrideAttrs (oldAttrs: {
+      postFixup = (oldAttrs.postFixup or "") +
+        # pkgs.lib.optionalString uwsm
+        ''
+          wrapProgram $out/bin/rofi --add-flags "-run-command 'uwsm app -- {cmd}'"
+        ''
+      ;
+    }))
+    jq
+    killall
+  ]);
 
   installPhase = ''
     # shellcheck disable=SC2154
