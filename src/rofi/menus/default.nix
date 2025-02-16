@@ -1,4 +1,4 @@
-{ pkgs, inputs, audio-theme-str ? "", network-theme-str ? "", bt-theme-str ? "", ... }:
+{ pkgs, inputs, audio-theme-str ? "", network-theme-str ? "", bt-theme-str ? "", uwsm ? false, ... }:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "menus";
@@ -9,7 +9,13 @@ pkgs.stdenv.mkDerivation rec {
   # remove input if https://github.com/firecat53/networkmanager-dmenu/pull/153 is merged
   nativeBuildInputs = with pkgs;[ makeWrapper ];
   runtimeInputs = pkgs.lib.makeBinPath (with pkgs; [
-    rofi-wayland
+    (rofi-wayland.overrideAttrs (oldAttrs: {
+      postFixup = (oldAttrs.postFixup or "") + (
+        pkgs.lib.optionalString uwsm ''
+          wrapProgram $out/bin/rofi -a "run" --add-flags "-run-command 'uwsm app -- {cmd}'"
+        ''
+      );
+    }))
     jq
     killall
     libnotify
