@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2009
-_pid="$(hyprctl clients -j | jq -r '.[] | select(.class == "foot-quick") | .pid')"
+_pid="$(hyprctl clients -j | jq -r '.[] | select(.class == "quick-term") | .pid')"
 
 TERMINAL="foot"
 
 if [ "$_pid" != "" ]; then
   curr_focused="$(hyprctl activewindow -j | jq -r '.class')"
-  if [ "$curr_focused" = "foot-quick" ]; then
+  if [ "$curr_focused" = "quick-term" ]; then
     kill -9 "$_pid"
   else
     hyprctl dispatch focuswindow pid:"$_pid"
