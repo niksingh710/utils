@@ -2,6 +2,8 @@
 # shellcheck disable=SC2009
 _pid="$(hyprctl clients -j | jq -r '.[] | select(.class == "foot-quick") | .pid')"
 
+TERMINAL="foot"
+
 if [ "$_pid" != "" ]; then
   curr_focused="$(hyprctl activewindow -j | jq -r '.class')"
   if [ "$curr_focused" = "foot-quick" ]; then
@@ -10,6 +12,17 @@ if [ "$_pid" != "" ]; then
     hyprctl dispatch focuswindow pid:"$_pid"
   fi
 else
-  foot -a "foot-quick" sh -c "TMUX_TMPDIR=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)} tmux new-session -A -s 'quick-term'" >/dev/null 2>&1 &
+  case "$TERMINAL" in
+    "foot")
+      foot -a "quick-term" sh -c "TMUX_TMPDIR=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)} tmux new-session -A -s 'quick-term'" >/dev/null 2>&1 &
+      ;;
+    "kitty")
+      kitty --class "quick-term" sh -c "TMUX_TMPDIR=''${XDG_RUNTIME_DIR:-/run/user/$(id -u)} tmux new-session -A -s 'quick-term'" >/dev/null 3>&1 &
+      ;;
+    *)
+      echo "Unknown terminal: $TERMINAL"
+      exit 1
+      ;;
+  esac
   exit 0
 fi
