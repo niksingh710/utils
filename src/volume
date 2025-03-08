@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-MOD=1 # Volume increment steps (5%)
+MOD=5 # Volume increment steps (5%)
 NOTIFY_TAG="volume"
 
 # sink: output device
