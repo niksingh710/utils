@@ -1,0 +1,26 @@
+#!/bin/bash
+arg="freq"
+[ $# -eq 1 ] && arg="$1"
+
+case $arg in
+  "freq")
+    watch -n1 -t "grep 'MHz' /proc/cpuinfo"
+    ;;
+  "temp")
+    watch -n1 -t sensors | grep 'Core'
+    ;;
+  "usage")
+    watch -n1 -t mpstat -P ALL 1 1
+    ;;
+  "turbo")
+    [ -f /sys/devices/system/cpu/intel_pstate/no_turbo ] && echo "Turbo Boost: $(cat /sys/devices/system/cpu/intel_pstate/no_turbo)" || echo "Turbo Boost: no Pstate"
+    ;;
+  "governor")
+    echo "Governor:"
+    cat /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor | tr "\n" " | "
+    echo ""
+    ;;
+  *)
+    echo "Usage: cpu [freq|governor|temp|turbo|usage]"
+    ;;
+esac
