@@ -6,8 +6,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     center-align.url = "github:niksingh710/center-align";
     bstat.url = "github:niksingh710/basic-battery-stat";
-    # remove after this https://github.com/firecat53/networkmanager-dmenu/pull/153 is merged
-    networkmanager.url = "github:niksingh710/networkmanager-dmenu";
+    networkmanager.url = "github:firecat53/networkmanager-dmenu";
   };
 
   outputs = inputs@{ flake-parts, ... }:
@@ -26,6 +25,10 @@
             fast = mkShellApplication
               "fast" [ pkgs.jq ]
               (builtins.readFile ./src/hypr/fast);
+
+            icpu = mkShellApplication
+              "fast" [ pkgs.sysstat pkgs.lm_sensors ]
+              (builtins.readFile ./src/icpu);
 
             img-annotate = mkShellApplication
               "img-annotate"

@@ -59,15 +59,15 @@
         "nixpkgs": "nixpkgs_3"
       },
       "locked": {
-        "lastModified": 1739193687,
-        "narHash": "sha256-Qb3gnEiWyaue5V4WyktMS4O3ir6afur1hI65puAAND0=",
-        "owner": "niksingh710",
+        "lastModified": 1741993116,
+        "narHash": "sha256-Iy8Bi6aXtNXFfuQmRhLo50cs7pMx1l+OIv019Dqj6ow=",
+        "owner": "firecat53",
         "repo": "networkmanager-dmenu",
-        "rev": "0d04b8ed4bcdd9d2634ccbd12069d2b7e56ba0bc",
+        "rev": "65243f5ae1599695397b32dd40259fc888b2e9a7",
         "type": "github"
       },
       "original": {
-        "owner": "niksingh710",
+        "owner": "firecat53",
         "repo": "networkmanager-dmenu",
         "type": "github"
       }
