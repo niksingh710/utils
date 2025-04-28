@@ -27,7 +27,7 @@
               (builtins.readFile ./src/hypr/fast);
 
             icpu = mkShellApplication
-              "fast" [ pkgs.sysstat pkgs.lm_sensors ]
+              "icpu" [ pkgs.sysstat pkgs.lm_sensors ]
               (builtins.readFile ./src/icpu);
 
             img-annotate = mkShellApplication
