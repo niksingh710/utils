@@ -43,7 +43,7 @@
         in
         {
           devShells.default = config.pre-commit.devShell.overrideAttrs (oa: {
-            name = "ndots";
+            name = "utils";
           });
 
           pre-commit.settings.hooks.nixfmt-rfc-style.enable = true;
