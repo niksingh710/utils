@@ -7,91 +7,104 @@
     center-align.url = "github:niksingh710/center-align";
     bstat.url = "github:niksingh710/basic-battery-stat";
     networkmanager.url = "github:firecat53/networkmanager-dmenu";
+
+    git-hooks-nix = {
+      url = "github:cachix/git-hooks.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
   };
 
-  outputs = inputs@{ flake-parts, ... }:
+  outputs =
+    inputs@{ flake-parts, ... }:
     flake-parts.lib.mkFlake { inherit inputs; } {
-      systems = [ "x86_64-linux" "aarch64-linux" "aarch64-darwin" "x86_64-darwin" ];
-      perSystem = { config, self', inputs', pkgs, system, lib, ... }:
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "aarch64-darwin"
+        "x86_64-darwin"
+      ];
+      imports = [
+        inputs.git-hooks-nix.flakeModule
+      ];
+      perSystem =
+        {
+          inputs',
+          config,
+          pkgs,
+          ...
+        }:
         let
-          mkShellApplication = name: runtimeInputs: text: pkgs.writeShellApplication {
-            inherit name text runtimeInputs;
-          };
+          mkShellApplication =
+            name: runtimeInputs: text:
+            pkgs.writeShellApplication {
+              inherit name text runtimeInputs;
+            };
         in
         {
+          devShells.default = config.pre-commit.devShell.overrideAttrs (oa: {
+            name = "ndots";
+          });
+
+          pre-commit.settings.hooks.nixfmt-rfc-style.enable = true;
           packages = {
             center-align = inputs'.center-align.packages.default;
             bstat = inputs'.bstat.packages.default;
-            fast = mkShellApplication
-              "fast" [ pkgs.jq ]
-              (builtins.readFile ./src/hypr/fast);
+            fast = mkShellApplication "fast" [ pkgs.jq ] (builtins.readFile ./src/hypr/fast);
 
-            icpu = mkShellApplication
-              "icpu" [ pkgs.sysstat pkgs.lm_sensors ]
-              (builtins.readFile ./src/icpu);
+            icpu = mkShellApplication "icpu" [ pkgs.sysstat pkgs.lm_sensors ] (builtins.readFile ./src/icpu);
 
-            img-annotate = mkShellApplication
-              "img-annotate"
-              (with pkgs;[ libnotify wl-clipboard swappy ])
-              (builtins.readFile ./src/img-annotate);
+            img-annotate = mkShellApplication "img-annotate" (with pkgs; [
+              libnotify
+              wl-clipboard
+              swappy
+            ]) (builtins.readFile ./src/img-annotate);
 
-            focus = mkShellApplication
-              "focus"
-              (with pkgs;[ jq ])
-              (builtins.readFile ./src/hypr/focus);
+            focus = mkShellApplication "focus" (with pkgs; [ jq ]) (builtins.readFile ./src/hypr/focus);
 
-            move = mkShellApplication
-              "move"
-              (with pkgs;[ jq ])
-              (builtins.readFile ./src/hypr/move);
+            move = mkShellApplication "move" (with pkgs; [ jq ]) (builtins.readFile ./src/hypr/move);
 
-            fullscreen = mkShellApplication
-              "fullscreen"
-              (with pkgs;[ jq ])
-              (builtins.readFile ./src/hypr/fullscreen);
+            fullscreen = mkShellApplication "fullscreen" (with pkgs; [ jq ]) (
+              builtins.readFile ./src/hypr/fullscreen
+            );
 
-            zoom = mkShellApplication
-              "zoom"
-              (with pkgs;[ jq bc ])
-              (builtins.readFile ./src/hypr/zoom);
+            zoom = mkShellApplication "zoom" (with pkgs; [
+              jq
+              bc
+            ]) (builtins.readFile ./src/hypr/zoom);
 
-            toggle-group = mkShellApplication "toggle-group" (with pkgs;[ jq libnotify ])
-              (builtins.readFile ./src/hypr/toggle-group);
+            toggle-group = mkShellApplication "toggle-group" (with pkgs; [
+              jq
+              libnotify
+            ]) (builtins.readFile ./src/hypr/toggle-group);
 
-            lid-down = mkShellApplication
-              "lid-down"
-              (with pkgs;[ jq ])
-              (builtins.readFile ./src/hypr/lid-down);
+            lid-down = mkShellApplication "lid-down" (with pkgs; [ jq ]) (
+              builtins.readFile ./src/hypr/lid-down
+            );
 
-            volume = mkShellApplication
-              "volume"
-              (with pkgs;[ bc jq gawk libnotify ])
-              (builtins.readFile ./src/volume);
+            volume = mkShellApplication "volume" (with pkgs; [
+              bc
+              jq
+              gawk
+              libnotify
+            ]) (builtins.readFile ./src/volume);
 
-            brightness = mkShellApplication
-              "brightness"
-              (with pkgs;[ libnotify brightnessctl ])
-              (builtins.readFile ./src/brightness);
+            brightness = mkShellApplication "brightness" (with pkgs; [
+              libnotify
+              brightnessctl
+            ]) (builtins.readFile ./src/brightness);
 
-            quick-term = mkShellApplication
-              "quick-term"
-              (with pkgs;[ foot jq tmux ])
-              (builtins.readFile ./src/hypr/quick-term);
+            quick-term = mkShellApplication "quick-term" (with pkgs; [
+              foot
+              jq
+              tmux
+            ]) (builtins.readFile ./src/hypr/quick-term);
 
-            myip = mkShellApplication
-              "myip"
-              (with pkgs;[ dnsutils ])
-              (builtins.readFile ./src/myip);
+            myip = mkShellApplication "myip" (with pkgs; [ dnsutils ]) (builtins.readFile ./src/myip);
 
-            cat = mkShellApplication
-              "cat"
-              (with pkgs;[ bat ])
-              (builtins.readFile ./src/cat);
+            cat = mkShellApplication "cat" (with pkgs; [ bat ]) (builtins.readFile ./src/cat);
 
-            monitor = mkShellApplication
-              "monitor"
-              (with pkgs;[ jq ])
-              (builtins.readFile ./src/hypr/monitor);
+            monitor = mkShellApplication "monitor" (with pkgs; [ jq ]) (builtins.readFile ./src/hypr/monitor);
 
             walogram = pkgs.callPackage ./src/walogram { };
             walogram-test = (pkgs.callPackage ./src/walogram { }).override {
