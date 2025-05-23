@@ -4,11 +4,23 @@ pkgs.stdenv.mkDerivation rec {
   pname = "rofi-powermenu";
   version = "1.0";
 
-  src = ./.;
+  src = builtins.path {
+    path = ./.;
+    name = "source";
+  };
 
   nativeBuildInputs = [ pkgs.bash ];
-  buildInputs = [ pkgs.coreutils pkgs.makeWrapper ];
-  runtimeInputs = pkgs.lib.makeBinPath (with pkgs;[ rofi-wayland killall ]);
+  buildInputs = [
+    pkgs.coreutils
+    pkgs.makeWrapper
+  ];
+  runtimeInputs = pkgs.lib.makeBinPath (
+    with pkgs;
+    [
+      rofi-wayland
+      killall
+    ]
+  );
 
   installPhase = ''
     # shellcheck disable=SC2154

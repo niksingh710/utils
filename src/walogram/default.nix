@@ -1,12 +1,22 @@
-{ pkgs, zip, imagemagick, image ? "", colors ? "", ... }:
+{
+  pkgs,
+  zip,
+  imagemagick,
+  image ? "",
+  colors ? "",
+  ...
+}:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "walogram";
   version = "1.0";
 
-  src = ./.;
+  src = builtins.path {
+    path = ./.;
+    name = "source";
+  };
 
-  nativeBuildInputs = with pkgs;[ makeWrapper ];
+  nativeBuildInputs = with pkgs; [ makeWrapper ];
   runtimeInputs = pkgs.lib.makeBinPath [
     zip
     imagemagick

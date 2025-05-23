@@ -1,22 +1,35 @@
-{ pkgs, inputs, audio-theme-str ? "", network-theme-str ? "", bt-theme-str ? "", ... }:
+{
+  pkgs,
+  inputs,
+  audio-theme-str ? "",
+  network-theme-str ? "",
+  bt-theme-str ? "",
+  ...
+}:
 
 pkgs.stdenv.mkDerivation rec {
   pname = "menus";
   version = "1.0";
 
-  src = ./.;
+  src = builtins.path {
+    path = ./.;
+    name = "source";
+  };
 
   # remove input if https://github.com/firecat53/networkmanager-dmenu/pull/153 is merged
-  nativeBuildInputs = with pkgs;[ makeWrapper ];
-  runtimeInputs = pkgs.lib.makeBinPath (with pkgs; [
-    rofi-wayland
-    jq
-    killall
-    libnotify
-    rofi-bluetooth
-    rofimoji
-    inputs.networkmanager.packages.${pkgs.system}.default
-  ]);
+  nativeBuildInputs = with pkgs; [ makeWrapper ];
+  runtimeInputs = pkgs.lib.makeBinPath (
+    with pkgs;
+    [
+      rofi-wayland
+      jq
+      killall
+      libnotify
+      rofi-bluetooth
+      rofimoji
+      inputs.networkmanager.packages.${pkgs.system}.default
+    ]
+  );
 
   network-theme = builtins.replaceStrings [ "\n" ] [ " " ] network-theme-str;
   installPhase = ''
