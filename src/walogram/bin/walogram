@@ -26,7 +26,7 @@ color15="#bd6f3e"
 
 themeName="stylix.tdesktop-theme"
 dir="$HOME/.cache/stylix-telegram-theme"
-
+mkdir -p "$dir" 2>/dev/null || true
 # trap 'rm -rf "$tempdir"; exit 0' INT TERM EXIT
 gentheme() {
   tempdir="$(mktemp -d)"
@@ -35,7 +35,7 @@ gentheme() {
       >"$tempdir/colors.tdesktop-theme"
 
   if [ "$IMAGE" != "" ]; then
-    magick convert -resize 1920x1080 -blur 0x16 "$IMAGE" "$tempdir/background.jpg"
+    magick "$IMAGE" -resize 1920x1080 -blur 0x16 "$tempdir/background.jpg"
 
     zip -j -FS "$dir/$themeName" "$tempdir"/* >/dev/null 2>&1 || {
       # create clean zip in case syncing failed
