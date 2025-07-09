@@ -94,6 +94,10 @@
               brightnessctl
             ]) (builtins.readFile ./src/brightness);
 
+            aerospace-focus-fzf = mkShellApplication "aerospace-focus-fzf" (with pkgs; [
+              fzf
+            ]) (builtins.readFile ./src/aerospace/aero.focus.sh);
+
             quick-term = mkShellApplication "quick-term" (with pkgs; [
               foot
               jq
