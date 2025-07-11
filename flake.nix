@@ -94,6 +94,7 @@
               brightnessctl
             ]) (builtins.readFile ./src/brightness);
 
+            aerospace-focus-choose = pkgs.callPackage ./src/aerospace/default.nix { };
             aerospace-focus-fzf = mkShellApplication "aerospace-focus-fzf" (with pkgs; [
               fzf
             ]) (builtins.readFile ./src/aerospace/aero.focus.sh);

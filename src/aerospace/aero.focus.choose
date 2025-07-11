@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+font="Menlo"
+# {{font}}
+
+window_output="$(aerospace list-windows --all | choose \
+    -u \
+    -f "$font" \
+    -p 'Select a window to focus'
+)"
+echo "$window_output"
+window_id="$(echo "$window_output" | cut -d'|' -f1 | tr -cd '[:digit:]')"
+aerospace focus --window-id "$window_id"
+aerospace move-mouse window-lazy-center || aerospace move-mouse monitor-lazy-center

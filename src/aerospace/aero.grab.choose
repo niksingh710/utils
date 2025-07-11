@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+
+font="Menlo"
+# {{font}}
+
+window_output="$(aerospace list-windows --all | choose \
+    -u \
+    -f "$font" \
+    -p 'Select a window to focus'
+)"
+
+echo "$window_output"
+window_id="$(echo "$window_output" | cut -d'|' -f1 | tr -cd '[:digit:]')"
+echo "Focusing window with ID: $window_id"
+current_workspace="$(aerospace list-workspaces --focused)"
+aerospace move-node-to-workspace \
+  --focus-follows-window \
+  --fail-if-noop \
+  --window-id "$window_id" \
+  "$current_workspace" || aerospace focus --window-id "$window_id"
+
+
+aerospace move-mouse window-lazy-center || aerospace move-mouse monitor-lazy-center
