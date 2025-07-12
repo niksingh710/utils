@@ -2,7 +2,7 @@
 
 # Keybindings
 FOCUS_KEY="enter"
-MOVE_KEY="space"  # Use Ctrl+X as it's distinct from Enter
+MOVE_KEY="space"  
 
 # Display key help
 HEADER="$FOCUS_KEY   - Focus window
