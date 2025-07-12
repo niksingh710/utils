@@ -30,6 +30,7 @@ nix run github:niksingh710/utils#fullscreen
 
 | Script Name | Description |
 |------------|-------------|
+| [aerospace/aero.focus.sh](./src/aerospace/aero.focus.sh) | fzf menu to focus window or grab window to the current workspace  |
 | [hypr/fast](./src/hypr/fast) | Toggles animations and rounding in Hyprland for a snappier experience. |
 | [img-annotate](./src/img-annotate) | Opens Swappy to edit the image currently in clipboard. |
 | [hypr/focus](./src/hypr/focus) | Handles focus between tiled and floating windows (like tabbed browsing). |
